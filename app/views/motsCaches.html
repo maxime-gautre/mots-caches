@@ -1,0 +1,21 @@
+<div ng-controller="MotsCachesController">
+  <div class="text-center">
+    <div class="col-lg-3" ng-repeat="word in myWords">
+      {{word}}
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <div style="background:#F2F2F2">
+    <table style="margin: 0 auto;" class="table-bordered table-responsive">
+      <tr ng-repeat="row in myTab">
+        <td style=" padding: 8px 15px 8px 15px; color: #000000;" ng-repeat="column in row track by $index">
+          {{column}}
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!--<hr/>-->
+</div>
