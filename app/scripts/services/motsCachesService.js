@@ -3,10 +3,10 @@
 angular.module('projectsApp')
   .service('MotsCachesService', function () {
 
-    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    var myWords = ["voiture", "bruler", "accueil", "rouge", "dinosaure", "eclair", "misere", "jambon","visage","javascript"]
-      .map(function(el){ return el.toUpperCase()});
+    var myWords = ['voiture', 'bruler', 'accueil', 'rouge', 'dinosaure', 'eclair', 'misere', 'jambon','visage','javascript']
+	.map(function(el){ return el.toUpperCase();});
 
     this.getWords = function () {
       return myWords;
@@ -14,8 +14,7 @@ angular.module('projectsApp')
 
     this.getTab = function () {
 
-      var avgWordsLength = this.getWords().reduce(function(p, c, i){return p + (c.length-p) / (i+1)},0);
-      //var tab = this.getWords().map(function (el) { return el.split("");});
+      var avgWordsLength = this.getWords().reduce(function(p, c, i){return p + (c.length-p) / (i+1);},0);
       var sizeMatrix = Math.ceil(avgWordsLength) * 2 + 2;
       var ntab = initMatrix(sizeMatrix);
       setAllWords(myWords, ntab, sizeMatrix);
@@ -29,7 +28,7 @@ angular.module('projectsApp')
       for (var i = 0; i < size; ++i) {
         tab[i] = [];
         for (var j = 0; j < size; ++j) {
-          tab[i][j] = "*";
+          tab[i][j] = '*';
         }
       }
       return tab;
@@ -39,23 +38,10 @@ angular.module('projectsApp')
 
       for (var i = 0; i < size; ++i) {
         for (var j = 0; j < size; ++j) {
-          if (ntab[i][j] == "*") {
+          if (ntab[i][j] === '*') {
             ntab[i][j] = letters.charAt(Math.floor(Math.random() * letters.length));
           }
         }
-      }
-    };
-
-    var afficher = function (tab) {
-
-      var str;
-      for (var i = 0; i < tab.length; ++i) {
-        str = '';
-        var tabEl = tab[i];
-        for (var j = 0; j < tabEl.length; ++j) {
-          str += tabEl[j] + '-';
-        }
-        console.log(str);
       }
     };
 
@@ -73,28 +59,33 @@ angular.module('projectsApp')
     var calculDistanceMax = function (objWords, sizeMatrix) {
 
       function compare(a, b) {
-        if (a.dist < b.dist)
+        if (a.dist < b.dist) {
           return 1;
-        if (a.dist > b.dist)
+		}
+        if (a.dist > b.dist) {
           return -1;
+		}
         return 0;
       }
 
+	  var computeDist = function(distances, j, h) {
+		 var sumDist = objWords.map(function (objWord) {
+            var dist = (objWord.centroide[0] - j) * (objWord.centroide[0] - j) + (objWord.centroide[1] - h) * (objWord.centroide[1] - h);
+            return dist;
+			
+          }).reduce(function (valPrec, valCourante) {
+            return valPrec + valCourante;
+          });
+		  
+		   distances.push({dist: sumDist, x: j, y: h});
+	  };
 
       //find Max distance of this word
       var distances = [];
       for (var j = 2; j < sizeMatrix; ++j) {
         for (var h = 2; h < sizeMatrix; ++h) {
-          // calcul distance entre word et (j,h)
-          var sumDist = objWords.map(function (objWord) {
-
-            var dist = (objWord.centroide[0] - j) * (objWord.centroide[0] - j) + (objWord.centroide[1] - h) * (objWord.centroide[1] - h);
-            return dist;
-          }).reduce(function (valPrec, valCourante) {
-            return valPrec + valCourante
-          });
-
-          distances.push({dist: sumDist, x: j, y: h});
+			// calcul distance entre word et (j,h)
+			computeDist(distances, j, h);
         }
       }
 
@@ -119,35 +110,35 @@ angular.module('projectsApp')
       var isDiagonaleInverseGauche = contains(word.length - 1, sizeMatrix - 1, word.length - 1, sizeMatrix - 1);
 
       if (isHoriz) {
-        arrayRes.push("Horizontal");
+        arrayRes.push('Horizontal');
       }
 
       if (isHorizInverse) {
-        arrayRes.push("Horizontal-inverse");
+        arrayRes.push('Horizontal-inverse');
       }
 
       if (isVertical) {
-        arrayRes.push("Vertical");
+        arrayRes.push('Vertical');
       }
 
       if (isVerticalInverse) {
-        arrayRes.push("Vertical-inverse");
+        arrayRes.push('Vertical-inverse');
       }
 
       if (isDiagonaleDroite) {
-        arrayRes.push("Diagonale-droite");
+        arrayRes.push('Diagonale-droite');
       }
 
       if (isDiagonaleGauche) {
-        arrayRes.push("Diagonale-gauche");
+        arrayRes.push('Diagonale-gauche');
       }
 
       if (isDiagonaleInverseDroite) {
-        arrayRes.push("Diagonale-inverse-droite");
+        arrayRes.push('Diagonale-inverse-droite');
       }
 
       if (isDiagonaleInverseGauche) {
-        arrayRes.push("Diagonale-inverse-gauche");
+        arrayRes.push('Diagonale-inverse-gauche');
       }
 
       return arrayRes;
@@ -157,7 +148,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Horizontal";
+      obj.sens = 'Horizontal';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x, obj.y + (obj.word.length - 1) / 2];
@@ -169,7 +160,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Horizontal-inverse";
+      obj.sens = 'Horizontal-inverse';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x, obj.y - (obj.word.length - 1) / 2];
@@ -180,7 +171,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Vertical";
+      obj.sens = 'Vertical';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x + (obj.word.length - 1) / 2, obj.y];
@@ -192,7 +183,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Vertical-inverse";
+      obj.sens = 'Vertical-inverse';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x - (obj.word.length - 1) / 2, obj.y];
@@ -204,7 +195,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Diagonale-droite";
+      obj.sens = 'Diagonale-droite';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x + (obj.word.length - 1) / 2, obj.y + (obj.word.length - 1) / 2];
@@ -216,7 +207,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Diagonale-gauche";
+      obj.sens = 'Diagonale-gauche';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x + (obj.word.length - 1) / 2, obj.y - (obj.word.length - 1) / 2];
@@ -227,7 +218,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Diagonale-inverse-droite";
+      obj.sens = 'Diagonale-inverse-droite';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x - (obj.word.length - 1) / 2, obj.y + (obj.word.length - 1) / 2];
@@ -239,7 +230,7 @@ angular.module('projectsApp')
 
       var obj = {};
       obj.word = word;
-      obj.sens = "Diagonale-inverse-gauche";
+      obj.sens = 'Diagonale-inverse-gauche';
       obj.x = x;
       obj.y = y;
       obj.centroide = [obj.x - (obj.word.length - 1) / 2, obj.y - (obj.word.length - 1) / 2];
@@ -253,7 +244,7 @@ angular.module('projectsApp')
       switch (choixDisp) {
 
         case 0:
-          // horiz sens de gauche � droite
+          // horiz sens de gauche à droite
           obj = getCoordHorizontal(word,
             sizeMatrix,
             parseInt(Math.random() * sizeMatrix - 1),
@@ -262,7 +253,7 @@ angular.module('projectsApp')
           break;
 
         case 1:
-          // horiz sens de droite � gauche
+          // horiz sens de droite à gauche
           obj = getCoordHorizontalInverse(word,
             sizeMatrix,
             parseInt(Math.random() * sizeMatrix - 1),
@@ -329,7 +320,7 @@ angular.module('projectsApp')
       var delta = obj.y + obj.word.length;
       var h = 0;
       for (var j = obj.y; j < delta; j++) {
-        if (tabEl[j] != "*" && tabEl[j] != obj.word[h]) return true;
+        if (tabEl[j] !== '*' && tabEl[j] !== obj.word[h]) { return true; }
         ++h;
       }
       return false;
@@ -341,7 +332,7 @@ angular.module('projectsApp')
       var diff = obj.y - obj.word.length;
       var h = 0;
       for (var j = obj.y; j > diff; j--) {
-        if (tabEl[j] != "*" && tabEl[j] != obj.word[h]) return true;
+        if (tabEl[j] !== '*' && tabEl[j] !== obj.word[h]) { return true; }
         ++h;
       }
       return false;
@@ -353,7 +344,7 @@ angular.module('projectsApp')
       var delta = obj.x + obj.word.length;
       var h = 0;
       for (var j = obj.x; j < delta; j++) {
-        if (ntab[j][obj.y] != "*" && ntab[j][obj.y] != obj.word[h]) return true;
+        if (ntab[j][obj.y] !== '*' && ntab[j][obj.y] !== obj.word[h]) { return true; }
         ++h;
       }
       return false;
@@ -364,7 +355,7 @@ angular.module('projectsApp')
       var delta = obj.x - obj.word.length;
       var h = 0;
       for (var j = obj.x; j > delta; j--) {
-        if (ntab[j][obj.y] != "*" && ntab[j][obj.y] != obj.word[h]) return true;
+        if (ntab[j][obj.y] !== '*' && ntab[j][obj.y] !== obj.word[h]) { return true; }
         ++h;
       }
       return false;
@@ -377,7 +368,7 @@ angular.module('projectsApp')
       var ny = obj.y;
       for (var j = obj.x; j < delta; j++) {
 
-        if (ntab[j][ny] != "*" && ntab[j][ny] != obj.word[h]) return true;
+        if (ntab[j][ny] !== '*' && ntab[j][ny] !== obj.word[h]) { return true; }
         ++h;
         ++ny;
       }
@@ -392,7 +383,7 @@ angular.module('projectsApp')
       var ny = obj.y;
       for (var j = obj.x; j < delta; j++) {
 
-        if (ntab[j][ny] != "*" && ntab[j][ny] != obj.word[h]) return true;
+        if (ntab[j][ny] !== '*' && ntab[j][ny] !== obj.word[h]) { return true; }
         ++h;
         --ny;
       }
@@ -406,7 +397,7 @@ angular.module('projectsApp')
       var h = 0;
       var ny = obj.y;
       for (var j = obj.x; j > delta; j--) {
-        if (ntab[j][ny] != "*" && ntab[j][ny] != obj.word[h]) return true;
+        if (ntab[j][ny] !== '*' && ntab[j][ny] !== obj.word[h]) { return true; }
         ++h;
         ++ny;
       }
@@ -420,7 +411,7 @@ angular.module('projectsApp')
       var h = 0;
       var ny = obj.y;
       for (var j = obj.x; j > delta; j--) {
-        if (ntab[j][ny] != "*" && ntab[j][ny] != obj.word[h]) return true;
+        if (ntab[j][ny] !== '*' && ntab[j][ny] !== obj.word[h]) { return true; }
         ++h;
         --ny;
       }
@@ -521,21 +512,21 @@ angular.module('projectsApp')
     };
 
     var setPosition = function (ntab, obj) {
-      if (obj.sens === "Horizontal-inverse") {
+      if (obj.sens === 'Horizontal-inverse') {
         setPosHorizontalInverse(ntab, obj);
-      } else if (obj.sens === "Horizontal") {
+      } else if (obj.sens === 'Horizontal') {
         setPosHorizontal(ntab, obj);
-      } else if (obj.sens === "Vertical") {
+      } else if (obj.sens === 'Vertical') {
         setPosVertical(ntab, obj);
-      } else if (obj.sens === "Vertical-inverse") {
+      } else if (obj.sens === 'Vertical-inverse') {
         setPosVerticalInverse(ntab, obj);
-      } else if (obj.sens === "Diagonale-droite") {
+      } else if (obj.sens === 'Diagonale-droite') {
         setPosDiagonaleDroite(ntab, obj);
-      } else if (obj.sens === "Diagonale-gauche") {
+      } else if (obj.sens === 'Diagonale-gauche') {
         setPosDiagonaleGauche(ntab, obj);
-      } else if (obj.sens === "Diagonale-inverse-gauche") {
+      } else if (obj.sens === 'Diagonale-inverse-gauche') {
         setPosDiagonaleInverseGauche(ntab, obj);
-      } else if (obj.sens === "Diagonale-inverse-droite") {
+      } else if (obj.sens === 'Diagonale-inverse-droite') {
         setPosDiagonaleInverseDroite(ntab, obj);
       }
     };
@@ -557,45 +548,45 @@ angular.module('projectsApp')
         bool = true;
         indexDist = 0;
         var distArray = calculDistanceMax(objWords, sizeMatrix - 2);
-        while (bool && indexDist != distArray.length) {
+        while (bool && indexDist !== distArray.length) {
 
           index = 0;
           maxDist = distArray[indexDist];
           var possibleArrays = getAcceptablePosition(maxDist, myWords[i], sizeMatrix);
           possibleArrays = shuffle(possibleArrays);
 
-          while (bool && index != possibleArrays.length) {
+          while (bool && index !== possibleArrays.length) {
 
             var elementArray = possibleArrays[index];
-            if (elementArray === "Horizontal-inverse") {
+            if (elementArray === 'Horizontal-inverse') {
               obj = getCoordHorizontalInverse(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionHorizontalInverse(ntab, obj);
 
-            } else if (elementArray === "Horizontal") {
+            } else if (elementArray === 'Horizontal') {
               obj = getCoordHorizontal(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionHorizontal(ntab, obj);
 
-            } else if (elementArray === "Vertical") {
+            } else if (elementArray === 'Vertical') {
               obj = getCoordVertical(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionVertical(ntab, obj);
 
-            } else if (elementArray === "Vertical-inverse") {
+            } else if (elementArray === 'Vertical-inverse') {
               obj = getCoordVerticalInverse(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionVerticalInverse(ntab, obj);
 
-            } else if (elementArray === "Diagonale-droite") {
+            } else if (elementArray === 'Diagonale-droite') {
               obj = getCoordDiagonaleDroite(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionDiagonalDroite(ntab, obj);
 
-            } else if (elementArray === "Diagonale-gauche") {
+            } else if (elementArray === 'Diagonale-gauche') {
               obj = getCoordDiagonaleGauche(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionDiagonalGauche(ntab, obj);
 
-            } else if (elementArray === "Diagonale-inverse-gauche") {
+            } else if (elementArray === 'Diagonale-inverse-gauche') {
               obj = getCoordDiagonaleInverseGauche(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionDiagonalInverseGauche(ntab, obj);
 
-            } else if (elementArray === "Diagonale-inverse-droite") {
+            } else if (elementArray === 'Diagonale-inverse-droite') {
               obj = getCoordDiagonaleInverseDroite(myWords[i], sizeMatrix, maxDist.x, maxDist.y);
               bool = isCollisionDiagonalInverseDroite(ntab, obj);
 
@@ -606,7 +597,7 @@ angular.module('projectsApp')
         }
 
         if (bool) {
-          console.log("*** collision ***");
+          console.log('*** collision ***');
           return;
         }
 
