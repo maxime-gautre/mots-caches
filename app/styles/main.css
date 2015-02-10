@@ -27,6 +27,7 @@ body {
 /* Custom page footer */
 .footer {
   padding-top: 19px;
+  margin-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
@@ -76,4 +77,24 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+[drag-select] {
+  cursor: pointer;
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+
+[drag-select] .eng-selected-item {
+  background: #337AB7;
+  color: white;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid gray;
 }

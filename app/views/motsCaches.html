@@ -1,21 +1,28 @@
-<div ng-controller="MotsCachesController">
-  <div class="text-center">
-    <div class="col-lg-3" ng-repeat="word in myWords">
-      {{word}}
+<section>
+  <div ng-controller="MotsCachesController" style="margin-left: 3%">
+    <div class="col-lg-3" style="margin-bottom: 30px;">
+      <div class="col-lg-5 col-lg-offset-7">
+        <div class="text-center">
+          <h4>Liste des mots : </h4>
+          <div class="col-lg-12" ng-repeat="word in myWords">
+          {{word}}
+          </div>
+        </div>
+      </div>
+    </div>  
+    <div class="col-lg-7">
+        <div class="row">
+          <div class="col-lg-9">
+            <table drag-select drag-select-ids="ids" style="margin: 0 auto; background:#F2F2F2;" class="table-bordered table-responsive">
+              <tr ng-repeat="row in myTab">
+                <td id="{{'id-'+ $index + '-' + $parent.$index}}" style="padding: 8px 15px 8px 15px;" ng-repeat="column in row track by $index">
+                  {{column}}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <p>Selected IDs: {{ids | json}}</p>
     </div>
   </div>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <div style="background:#F2F2F2">
-    <table style="margin: 0 auto;" class="table-bordered table-responsive">
-      <tr ng-repeat="row in myTab">
-        <td style=" padding: 8px 15px 8px 15px; color: #000000;" ng-repeat="column in row track by $index">
-          {{column}}
-        </td>
-      </tr>
-    </table>
-  </div>
-  <!--<hr/>-->
-</div>
+<section>
