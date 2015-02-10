@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('projectsApp')
-  .service('MotsCachesService', function () {
+  .service('MotsCachesServiceCreation', function () {
 
     var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -36,10 +36,20 @@ angular.module('projectsApp')
 
     var fillMatrix = function (ntab, size) {
 
+      var value;
       for (var i = 0; i < size; ++i) {
         for (var j = 0; j < size; ++j) {
           if (ntab[i][j] === '*') {
-            ntab[i][j] = letters.charAt(Math.floor(Math.random() * letters.length));
+            ntab[i][j] = {
+             found: false, 
+             value: letters.charAt(Math.floor(Math.random() * letters.length))
+            };
+          } else {
+            value = ntab[i][j];
+            ntab[i][j] = {
+             found: false, 
+             value: value
+            };
           }
         }
       }
@@ -85,7 +95,7 @@ angular.module('projectsApp')
       for (var j = 2; j < sizeMatrix; ++j) {
         for (var h = 2; h < sizeMatrix; ++h) {
 			// calcul distance entre word et (j,h)
-			computeDist(distances, j, h);
+			     computeDist(distances, j, h);
         }
       }
 

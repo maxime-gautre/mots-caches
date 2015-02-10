@@ -11,7 +11,7 @@ angular.module('projectsApp')
       var startCell = null;
       var dragging = false;
 
-      function mouseUp(el) {
+      function mouseUp() {
         dragging = false;
       }
       
@@ -22,7 +22,7 @@ angular.module('projectsApp')
       }
       
       function mouseEnter(el) {
-        if (!dragging) return;
+        if (!dragging) {return;}
         setEndCell(el);
       }
       
@@ -43,26 +43,85 @@ angular.module('projectsApp')
       function cellsBetween(start, end) {
         var coordsStart = getCoords(start);
         var coordsEnd = getCoords(end);
-        var topLeft = {
-          column: $window.Math.min(coordsStart.column, coordsEnd.column),
-          row: $window.Math.min(coordsStart.row, coordsEnd.row),
-        };
-        var bottomRight = {
-          column: $window.Math.max(coordsStart.column, coordsEnd.column),
-          row: $window.Math.max(coordsStart.row, coordsEnd.row),
-        };
-        return $element.find('td').filter(function() {
-          var el = angular.element(this);
-          var coords = getCoords(el);
-          return coords.column >= topLeft.column
-              && coords.column <= bottomRight.column
-              && coords.row >= topLeft.row
-              && coords.row <= bottomRight.row;
-        });
+
+        if(coordsStart.column === coordsEnd.column) {
+          if(coordsEnd.row > coordsStart.row) {
+            return $element.find('td').filter(function() {
+              var el = angular.element(this);
+              var coords = getCoords(el);
+              return coords.row <= coordsEnd.row && coords.row >= coordsStart.row && coords.column === coordsStart.column;
+            });
+          }  else {
+               return $element.find('td').filter(function() {
+              var el = angular.element(this);
+              var coords = getCoords(el);
+              return coords.row >= coordsEnd.row && coords.row <= coordsStart.row && coords.column === coordsStart.column;
+            });
+          }
+        }
+
+        if(coordsStart.row === coordsEnd.row) {
+          if(coordsEnd.column > coordsStart.column) {
+            return $element.find('td').filter(function() {
+              var el = angular.element(this);
+              var coords = getCoords(el);
+              return coords.column <= coordsEnd.column && coords.column >= coordsStart.column && coords.row === coordsStart.row;
+            });
+          } else {
+              return $element.find('td').filter(function() {
+              var el = angular.element(this);
+              var coords = getCoords(el);
+              return coords.column >= coordsEnd.column && coords.column <= coordsStart.column && coords.row === coordsStart.row;
+            });
+          }  
+        }
+
+        if(coordsEnd.row - coordsStart.row === coordsEnd.column - coordsStart.column) {
+            
+            if(coordsEnd.row > coordsStart.row) {
+
+              return $element.find('td').filter(function() {
+                var el = angular.element(this);
+                var coords = getCoords(el);
+                return coords.column - coordsEnd.column === coords.row - coordsEnd.row && coords.column <= coordsEnd.column && coords.column >= coordsStart.column;
+              }); 
+
+            } else {
+
+              return $element.find('td').filter(function() {
+                var el = angular.element(this);
+                var coords = getCoords(el);
+                return coords.column - coordsEnd.column === coords.row - coordsEnd.row && coords.column >= coordsEnd.column && coords.column <= coordsStart.column;
+              }); 
+            }
+        }
+
+        if(coordsEnd.row - coordsStart.row === coordsStart.column - coordsEnd.column) {
+          
+            if(coordsEnd.row > coordsStart.row) {
+
+              return $element.find('td').filter(function() {
+                var el = angular.element(this);
+                var coords = getCoords(el);
+                return coordsEnd.row - coords.row === coords.column - coordsEnd.column && coords.row <= coordsEnd.row && coords.row >= coordsStart.row;
+              }); 
+            } else {
+                return $element.find('td').filter(function() {
+                  var el = angular.element(this);
+                  var coords = getCoords(el);
+                  return coordsEnd.row - coords.row === coords.column - coordsEnd.column && coords.row >= coordsEnd.row && coords.row <= coordsStart.row;
+              }); 
+            }
+        }
+
+       return $element.find('td').filter(function() {
+              var el = angular.element(this);
+              var coords = getCoords(el);
+              return coords.column === coordsEnd.column && coords.row === coordsEnd.row || coords.row === coordsStart.row && coords.column === coordsStart.column;
+        }); 
       }
       
       function getCoords(cell) {
-        var row = cell.parents('row');
         return {
           column: cell[0].cellIndex, 
           row: cell.parent()[0].rowIndex
@@ -75,12 +134,12 @@ angular.module('projectsApp')
           $scope.$apply(function() {
             fn(el);
           });
-        }
+        };
       }
       
       $element.delegate('td', 'mousedown', wrap(mouseDown));
       $element.delegate('td', 'mouseenter', wrap(mouseEnter));
       $document.delegate('body', 'mouseup', wrap(mouseUp));
     }
-  }
+  };
 });

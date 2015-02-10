@@ -21,12 +21,12 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
-  padding-bottom: 19px;
+  padding-bottom: 15px;
 }
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
+  padding-top: 15px;
   margin-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
@@ -97,4 +97,12 @@ body {
 td {
   padding: 10px;
   border: 1px solid gray;
+}
+
+.text-found {
+  color: green;
+}
+
+[drag-select] .eng-selected-item .text-found {
+  color:white;
 }
