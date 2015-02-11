@@ -6,18 +6,22 @@ angular.module('projectsApp')
     var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     var myWords = ['voiture', 'bruler', 'accueil', 'rouge', 'dinosaure', 'eclair', 'misere', 'jambon','visage','javascript']
-	.map(function(el){ return el.toUpperCase();});
+	   .map(function(el){ return { value: el.toUpperCase(), found: false }; });
 
     this.getWords = function () {
       return myWords;
     };
 
+    this.getWordsValues = function () {
+      return myWords.map(function (el){ return el.value; });
+    };
+
     this.getTab = function () {
 
-      var avgWordsLength = this.getWords().reduce(function(p, c, i){return p + (c.length-p) / (i+1);},0);
-      var sizeMatrix = Math.ceil(avgWordsLength) * 2 + 2;
+      var avgWordsLength = this.getWordsValues().reduce(function(p, c, i){return p + (c.length-p) / (i+1);},0);
+      var sizeMatrix = Math.ceil(avgWordsLength) * 2;
       var ntab = initMatrix(sizeMatrix);
-      setAllWords(myWords, ntab, sizeMatrix);
+      setAllWords(this.getWordsValues(), ntab, sizeMatrix);
       fillMatrix(ntab, sizeMatrix);
       return ntab;
     };
@@ -92,8 +96,8 @@ angular.module('projectsApp')
 
       //find Max distance of this word
       var distances = [];
-      for (var j = 2; j < sizeMatrix; ++j) {
-        for (var h = 2; h < sizeMatrix; ++h) {
+      for (var j = 1; j < sizeMatrix; ++j) {
+        for (var h = 1; h < sizeMatrix; ++h) {
 			// calcul distance entre word et (j,h)
 			     computeDist(distances, j, h);
         }
@@ -522,6 +526,7 @@ angular.module('projectsApp')
     };
 
     var setPosition = function (ntab, obj) {
+
       if (obj.sens === 'Horizontal-inverse') {
         setPosHorizontalInverse(ntab, obj);
       } else if (obj.sens === 'Horizontal') {
@@ -557,7 +562,7 @@ angular.module('projectsApp')
 
         bool = true;
         indexDist = 0;
-        var distArray = calculDistanceMax(objWords, sizeMatrix - 2);
+        var distArray = calculDistanceMax(objWords, sizeMatrix - 1);
         while (bool && indexDist !== distArray.length) {
 
           index = 0;

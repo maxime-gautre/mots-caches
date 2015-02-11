@@ -103,6 +103,10 @@ td {
   color: green;
 }
 
+.text-striked {
+  text-decoration: line-through;
+}
+
 [drag-select] .eng-selected-item .text-found {
   color:white;
 }

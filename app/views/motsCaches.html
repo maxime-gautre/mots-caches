@@ -1,19 +1,19 @@
 <section>
   <div ng-controller="MotsCachesController" style="margin-left: 3%">
     <div class="col-lg-3" style="margin-bottom: 30px;">
-      <div class="col-lg-5 col-lg-offset-7">
+      <div class="col-lg-5 col-lg-offset-7 col-md-4 col-md-offset-7">
         <div class="text-center">
           <h4>Liste des mots : </h4>
-          <div class="col-lg-12" ng-repeat="word in myWords">
-          {{word}}
+          <div class="col-lg-12" ng-class="{'text-striked': word.found}" ng-repeat="word in myWords">
+          {{word.value}}
           </div>
         </div>
       </div>
     </div>  
-    <div class="col-lg-7">
+    <div class="col-lg-7 col-md-8">
         <div class="row">
-          <div class="col-lg-9">
-            <table drag-select drag-select-ids="ids" style="margin: 0 auto; background:#F2F2F2; margin-bottom: 15px;" class="table-bordered table-responsive">
+          <div class="col-lg-9 ">
+            <table id="mainTable" drag-select drag-select-ids="ids" style="margin: 0 auto; background:#F2F2F2; margin-bottom: 15px;" class="table-bordered table-responsive">
               <tr ng-repeat="row in myTab">
                 <td id="{{'id-'+ $parent.$index + '-' + $index}}" style="padding: 8px 15px 8px 15px;" ng-repeat="column in row track by $index">
                   <span ng-class="{ 'text-found': column.found}"> {{column.value}} </span>
@@ -21,7 +21,7 @@
               </tr>
             </table>
             <div class="pull-right">
-              <button ng-click="submit()" class="btn btn-primary">Soumettre</button>
+              <button custom-click ng-click="submit()" class="btn btn-primary">Soumettre</button>
             </div>
           </div>
         </div>

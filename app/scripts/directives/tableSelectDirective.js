@@ -7,6 +7,7 @@ angular.module('projectsApp')
       dragSelectIds: '='
     },
     controller: function($scope, $element) {
+
       var cls = 'eng-selected-item';
       var startCell = null;
       var dragging = false;
@@ -142,4 +143,15 @@ angular.module('projectsApp')
       $document.delegate('body', 'mouseup', wrap(mouseUp));
     }
   };
+});
+
+angular.module('projectsApp')
+.directive('customClick', function($window, $document) {
+    return {
+        link: function(scope, element) {
+          element.click(function() {
+            $document.find('#mainTable').find('td').removeClass();
+          }); 
+        }
+    };
 });

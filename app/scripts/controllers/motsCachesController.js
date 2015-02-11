@@ -9,7 +9,8 @@ angular.module('projectsApp')
     $scope.submit = function() {
     	var resMatrix = MotsCachesServiceValidation.validation($scope.ids, $scope.myWords, $scope.myTab);
     	if(resMatrix.length !== 0) {
-    		$scope.myTab = resMatrix;
+            $scope.myTab = resMatrix[0];
+    		$scope.myWords = resMatrix[1];
     	}
     };
   });
