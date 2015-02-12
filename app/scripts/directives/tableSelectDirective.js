@@ -150,7 +150,7 @@ angular.module('projectsApp')
     return {
         link: function(scope, element) {
           element.click(function() {
-            $document.find('#mainTable').find('td').removeClass();
+            $document.find('#mainTable').find('td').removeClass('eng-selected-item');
           }); 
         }
     };

@@ -3,6 +3,8 @@
 angular.module('projectsApp')
   .service('MotsCachesServiceValidation', function () {
 
+      var nbWordsFound = 0;
+
   		this.validation = function(selectedTab, listOfWords, matrix) {
   			var idCells = selectedTab.map(function (el) {
   				var array = el.split('-');
@@ -11,11 +13,23 @@ angular.module('projectsApp')
   			var submittedWord = getWord(idCells, matrix);
         var index = checkValidation(submittedWord, listOfWords);
   			if(index !== -1) {
+
+          if(listOfWords[index].found) {return [];}
+
+          nbWordsFound++;
   				return [updateMatrix(idCells, matrix), updateWords(index, listOfWords)];
   			} else {
   				return [];
   			}
   		};
+
+      this.getNbWordsFound = function() {
+        return nbWordsFound;
+      };
+
+      this.resetNbWordsFound = function() {
+        nbWordsFound = 0;
+      };
 
   		var getWord = function(idCells, matrix) {
   			var array = idCells.map(function (el){

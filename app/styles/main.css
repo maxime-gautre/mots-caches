@@ -100,7 +100,9 @@ td {
 }
 
 .text-found {
-  color: green;
+  color: white;
+  background-color: #939393;
+
 }
 
 .text-striked {

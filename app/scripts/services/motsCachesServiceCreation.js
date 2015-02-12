@@ -4,27 +4,40 @@ angular.module('projectsApp')
   .service('MotsCachesServiceCreation', function () {
 
     var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var choosenWords = ['voiture', 'bruler', 'accueil', 'rouge', 'dinosaure', 'eclair', 'misere', 'jambon','visage','javascript', 'scala', 'karting', 'messi', 'barbares', 'drole', 'souhaiter', 'astronomie', 'perceval', 'victoire', 'clown', 'arbre', 'exception'];
+    var collision = false;
 
-    var myWords = ['voiture', 'bruler', 'accueil', 'rouge', 'dinosaure', 'eclair', 'misere', 'jambon','visage','javascript']
-	   .map(function(el){ return { value: el.toUpperCase(), found: false }; });
 
     this.getWords = function () {
       return myWords;
     };
 
-    this.getWordsValues = function () {
-      return myWords.map(function (el){ return el.value; });
+    this.createWords = function() {
+      return choosenWords.map(function(el){ return { value: el.toUpperCase(), found: false }; });
     };
+
+    this.getWordsValues = function () {
+      return myWords.map(function (el) { return el.value; });
+    };
+
+    var myWords = this.createWords();
+    var avgWordsLength = this.getWordsValues().reduce(function(p, c, i){ return p + (c.length-p) / (i+1); },0);
+    var sizeMatrix = Math.ceil(avgWordsLength) * 2 ;
 
     this.getTab = function () {
 
-      var avgWordsLength = this.getWordsValues().reduce(function(p, c, i){return p + (c.length-p) / (i+1);},0);
-      var sizeMatrix = Math.ceil(avgWordsLength) * 2;
+      collision = false;
       var ntab = initMatrix(sizeMatrix);
       setAllWords(this.getWordsValues(), ntab, sizeMatrix);
+      if(collision) {
+        sizeMatrix++;
+        return this.getTab();
+      }
       fillMatrix(ntab, sizeMatrix);
       return ntab;
     };
+
+    
 
     var initMatrix = function (size) {
 
@@ -96,9 +109,9 @@ angular.module('projectsApp')
 
       //find Max distance of this word
       var distances = [];
-      for (var j = 1; j < sizeMatrix; ++j) {
-        for (var h = 1; h < sizeMatrix; ++h) {
-			// calcul distance entre word et (j,h)
+      for (var j = 0; j < sizeMatrix; ++j) {
+        for (var h = 0; h < sizeMatrix; ++h) {
+			     // calcul distance entre word et (j,h)
 			     computeDist(distances, j, h);
         }
       }
@@ -562,7 +575,7 @@ angular.module('projectsApp')
 
         bool = true;
         indexDist = 0;
-        var distArray = calculDistanceMax(objWords, sizeMatrix - 1);
+        var distArray = calculDistanceMax(objWords, sizeMatrix);
         while (bool && indexDist !== distArray.length) {
 
           index = 0;
@@ -612,7 +625,7 @@ angular.module('projectsApp')
         }
 
         if (bool) {
-          console.log('*** collision ***');
+          collision = true;
           return;
         }
 
